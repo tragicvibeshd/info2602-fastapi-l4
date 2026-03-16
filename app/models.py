@@ -1,19 +1,12 @@
-<<<<<<< HEAD
 from typing import Optional
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
-=======
-from sqlmodel import Field, SQLModel, Relationship
-from typing import Optional
-from pydantic import EmailStr   #insert at top of the file
->>>>>>> 8431d0e52179f66a64821b3f2b7168e26937b400
 
 class Token(SQLModel):
     access_token: str
     token_type: str
 
-<<<<<<< HEAD
 
 class UserCreate(SQLModel):
     username: str
@@ -27,19 +20,11 @@ class UserResponse(SQLModel):
     email: EmailStr
 
 
-=======
-class UserResponse(SQLModel):
-    id: Optional[int]
-    username:str
-    email: EmailStr
-
->>>>>>> 8431d0e52179f66a64821b3f2b7168e26937b400
 class User(SQLModel, table=False):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
     email: str = Field(index=True, unique=True)
     password: str
-<<<<<<< HEAD
     role: str = ""
 
 
@@ -51,23 +36,11 @@ class RegularUser(User, table=True):
     role: str = "regular_user"
     todos: list["Todo"] = Relationship(back_populates="user")
 
-=======
-    role:str = ""
-
-class Admin(User, table=True):
-    role:str = "admin"
-
-class RegularUser(User, table=True):
-    role:str = "regular_user"
-
-    todos: list['Todo'] = Relationship(back_populates="user")
->>>>>>> 8431d0e52179f66a64821b3f2b7168e26937b400
 
 class TodoCategory(SQLModel, table=True):
     category_id: int = Field(foreign_key="category.id", primary_key=True)
     todo_id: int = Field(foreign_key="todo.id", primary_key=True)
 
-<<<<<<< HEAD
 
 class Category(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -109,26 +82,3 @@ class Todo(SQLModel, table=True):
 
     user: RegularUser = Relationship(back_populates="todos")
     categories: list[Category] = Relationship(back_populates="todos", link_model=TodoCategory)
-=======
-class Category(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True, default=None)
-    user_id: int = Field(foreign_key="regularuser.id")
-    text:str
-
-    todos:list['Todo'] = Relationship(back_populates="categories", link_model=TodoCategory)
-
-class Todo(SQLModel, table=True):
-    id: Optional[int] = Field(primary_key=True, default=None)
-    user_id: int = Field(foreign_key="regularuser.id")
-    text:str
-    done: bool = False
-
-    user: RegularUser = Relationship(back_populates="todos")
-    categories:list['Category'] = Relationship(back_populates="todos", link_model=TodoCategory)
-
-    def toggle(self):
-        self.done = not self.done
-    
-    def get_cat_list(self):
-        return ', '.join([category.text for category in self.categories])
->>>>>>> 8431d0e52179f66a64821b3f2b7168e26937b400
